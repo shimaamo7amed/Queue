@@ -21,7 +21,7 @@ dispatch(new SendNotificationsAllUsers());
 
         return response()->json([
             'status' => 'success',
-            'message' => 'All notifications will be sent to users in batches via queue.'
+            'message' => 'All notifications will be sent to users via queue.'
         ]);
     } catch (\Throwable $th) {
         Log::error($th);
