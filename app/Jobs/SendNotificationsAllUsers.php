@@ -4,31 +4,22 @@ namespace App\Jobs;
 
 use App\Models\User;
 use Illuminate\Foundation\Queue\Queueable;
+use App\Notifications\SendUserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
 class SendNotificationsAllUsers implements ShouldQueue
 {
     use Queueable;
+    use Dispatchable, Queueable;
+
     public function handle(): void
     {
         $users = User::all();
-        if ($users) {
-        /*
-        replace sending email by adding email content to file
-        */
+        $message = "Welcom";
+
         foreach ($users as $user) {
-        $file = public_path("test/{$users->id}.txt");
-        $handle = fopen($file, "w");
-        $content = "Welcom , {$users->email}";
-        fwrite($handle, $content);
-        fclose($handle);
-        }
-        }else {
-        $file = public_path("test/result.txt");
-        $handle = fopen($file, "w");
-        $content = "No Users Found";
-        fwrite($handle, $content);
-        fclose($handle);
+            $user->notify(new SendUserNotification($message));
         }
     }
 }
